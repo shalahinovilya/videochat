@@ -4,6 +4,7 @@ const myVideoGrid = document.querySelector('.video-grid')
 const myVideo = document.createElement('video')
 const audioControl = document.querySelector('.mute-button')
 const videoControl = document.querySelector('.video-button')
+const leaveMeeting = document.querySelector('.leave-meeting')
 
 const myVideoClass = uuid()
 
@@ -13,7 +14,7 @@ myVideo.muted = true
 
 let myVideoStream
 
-navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+navigator.mediaDevices.getUserMedia({ video: true, audio: false })
     .then(stream => {
 
         const peer = new Peer(undefined, {
@@ -28,6 +29,7 @@ navigator.mediaDevices.getUserMedia({ video: true, audio: true })
 
         myVideoStream = stream
         addVideoStream(myVideo, stream)
+        initAudioVideoState (stream)
 
         peer.on('call', call => {
             console.log(call)
@@ -71,6 +73,25 @@ const addVideoStream = (video, stream) => {
     myVideoGrid.appendChild(video)
 }
 
+function initAudioVideoState (stream) {
+    const audioEnabled = stream?.getAudioTracks()[0]?.enabled
+    const videoEnabled = myVideoStream?.getVideoTracks()[0]?.enabled
+
+    if (audioEnabled) {
+        setUnmuteButton()
+    }
+    else {
+        setMuteButton()
+    }
+
+    if (videoEnabled) {
+        setStopButton()
+    }
+    else {
+        setPlayButton()
+    }
+
+}
 
 audioControl.addEventListener('click', () => {
     muteOrUnmuteAudio()
@@ -78,16 +99,19 @@ audioControl.addEventListener('click', () => {
 
 // MUTE OR UNMUTE AUDIO
 function muteOrUnmuteAudio ()  {
-    const enabled = myVideoStream.getAudioTracks()[0].enabled
+    const enabled = myVideoStream?.getAudioTracks()[0]?.enabled
+
+    if (enabled === undefined) return;
 
     if (enabled) {
         myVideoStream.getAudioTracks()[0].enabled = false
-        setUnmuteButton()
+        setMuteButton()
     }
     else {
-        setMuteButton()
+        setUnmuteButton()
         myVideoStream.getAudioTracks()[0].enabled = true
     }
+
 
 }
 
@@ -115,7 +139,9 @@ videoControl.addEventListener('click', () => {
 
 // PLAY OR STOP VIDEO
 function playOrStopVideo ()  {
-    const enabled = myVideoStream.getVideoTracks()[0].enabled
+    const enabled = myVideoStream?.getVideoTracks()[0]?.enabled
+
+    if (enabled === undefined) return;
 
     if (enabled) {
         myVideoStream.getVideoTracks()[0].enabled = false
@@ -167,6 +193,10 @@ socket.on('createMessage', msg => {
                     </div>`
 
     messagesBlock.appendChild(div)
+})
+
+leaveMeeting.addEventListener('click', () => {
+    window.history.back()
 })
 
 function uuid() {
