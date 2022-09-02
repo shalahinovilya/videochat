@@ -5,6 +5,9 @@ const myVideo = document.createElement('video')
 const audioControl = document.querySelector('.mute-button')
 const videoControl = document.querySelector('.video-button')
 const leaveMeeting = document.querySelector('.leave-meeting')
+const participantsBtn = document.querySelector('.chat-participants')
+const chatBtn = document.querySelector('.chat-messages')
+const participantsBlock = document.querySelector('.main__participants')
 
 const myVideoClass = uuid()
 
@@ -111,8 +114,6 @@ function muteOrUnmuteAudio ()  {
         setUnmuteButton()
         myVideoStream.getAudioTracks()[0].enabled = true
     }
-
-
 }
 
 function setUnmuteButton () {
@@ -195,8 +196,27 @@ socket.on('createMessage', msg => {
     messagesBlock.appendChild(div)
 })
 
+socket.on('roomUsers', ({room, users}) => {
+
+    const participantsList = participantsBlock.querySelector('.main-participants__participants-list')
+
+    participantsList.innerHTML = `${users.map(user => `<div class="participants-list__participant-content">
+                                                            ${user.username}
+                                                            </div>`).join('')}`
+})
+
 leaveMeeting.addEventListener('click', () => {
     window.history.back()
+})
+
+participantsBtn.addEventListener('click', () => {
+    participantsBlock.style.opacity = '1'
+    participantsBlock.style.zIndex = '9999'
+})
+
+chatBtn.addEventListener('click', () => {
+    participantsBlock.style.opacity = '0'
+    participantsBlock.style.zIndex = '-9999'
 })
 
 function uuid() {

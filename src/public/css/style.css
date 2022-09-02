@@ -68,6 +68,7 @@ video {
 }
 
 .main__right {
+    position: relative;
     display: flex;
     flex-direction: column;
     flex: 0 0 20%;
@@ -115,3 +116,26 @@ video {
     color: #CC3B33;
 }
 
+.main__participants {
+    position: absolute;
+    background-color: #242324;
+    top: 0;
+    bottom: 0;
+    left:0;
+    right: 0;
+    opacity: 0;
+    z-index: -9999;
+}
+
+.main-participants__participants-header {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.main-participants__participants-list ul {
+    list-style: none;
+}
+
+.participants-list__participant-content {
+    margin: 15px 0 0 15px;
+}
