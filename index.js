@@ -48,7 +48,11 @@ io.on('connection', socket => {
 
         socket.join(user.room)
 
-        socket.broadcast.to(user.room).emit('userConnected', {peerId: msg.peerId, videoClass: user.videoClass})
+        socket.broadcast.to(user.room).emit('userConnected', {
+            peerId: msg.peerId,
+            videoClass: user.videoClass,
+            username: user.username
+        })
 
         io.to(user.room).emit('roomUsers', {room: user.room, users: getRoomUsers(user.room)})
 

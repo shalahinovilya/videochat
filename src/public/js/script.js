@@ -1,7 +1,6 @@
 const socket = io();
 
 const myVideoGrid = document.querySelector('.video-grid')
-const myVideo = document.createElement('video')
 const audioControl = document.querySelector('.mute-button')
 const videoControl = document.querySelector('.video-button')
 const leaveMeeting = document.querySelector('.leave-meeting')
@@ -11,13 +10,11 @@ const participantsBlock = document.querySelector('.main__participants')
 
 const myVideoClass = uuid()
 
-myVideo.className = myVideoClass
-
-myVideo.muted = true
+const myVideoWrapper = createVideoBlock(myVideoClass, USERNAME)
 
 let myVideoStream
 
-navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+navigator.mediaDevices.getUserMedia({ video: true, audio: true })
     .then(stream => {
 
         const peer = new Peer(undefined, {
@@ -31,34 +28,35 @@ navigator.mediaDevices.getUserMedia({ video: true, audio: false })
         })
 
         myVideoStream = stream
-        addVideoStream(myVideo, stream)
-        initAudioVideoState (stream)
+        addVideoStream(myVideoWrapper, stream)
+        initAudioVideoState(stream)
 
         peer.on('call', call => {
-            console.log(call)
             call.answer(stream)
 
-            const video = document.createElement('video')
-            video.className = call.metadata
+            const videoWrapper = createVideoBlock(call.metadata.myVideoClass, call.metadata.username)
+
             call.on('stream', remoteVideoStream => {
-                addVideoStream(video, remoteVideoStream)
+                addVideoStream(videoWrapper, remoteVideoStream)
             })
         })
 
         socket.on('userConnected', msg => {
-            connectUser(msg.peerId, msg.videoClass, stream)
+            connectUser(msg.peerId, msg.videoClass, msg.username, stream)
         })
 
         socket.on('userDisconnect', videoClass => {
             document.getElementsByClassName(`${videoClass}`)[0].remove()
         })
 
-        function connectUser (peerId, videoClass, stream) {
-            const call = peer.call(peerId, stream, {metadata: myVideoClass});
-            const video = document.createElement('video')
-            video.className = `${videoClass}`
+        function connectUser (peerId, videoClass, username, stream) {
+
+            const call = peer.call(peerId, stream, {metadata: {myVideoClass, username: USERNAME}});
+
+            const videoWrapper = createVideoBlock(videoClass, username)
+
             call.on('stream', remoteVideoStream => {
-                addVideoStream(video, remoteVideoStream)
+                addVideoStream(videoWrapper,  remoteVideoStream)
             })
         }
 
@@ -67,13 +65,24 @@ navigator.mediaDevices.getUserMedia({ video: true, audio: false })
         console.log("An error occurred: " + err);
     });
 
+function createVideoBlock (videoClass, username) {
+    const videoWrapper = document.createElement('div')
+    const video = document.createElement('video')
+    videoWrapper.className = `videoWrapper ${videoClass}`
+    videoWrapper.appendChild(video)
+    videoWrapper.insertAdjacentHTML('beforeend', `<p>${username}</p>`)
+    return videoWrapper
+}
 
-const addVideoStream = (video, stream) => {
+const addVideoStream = (videoWrapper, stream) => {
+
+    const video = videoWrapper.querySelector('video')
     video.srcObject = stream
     video.addEventListener('loadedmetadata', () => {
         video.play()
     })
-    myVideoGrid.appendChild(video)
+
+    myVideoGrid.appendChild(videoWrapper)
 }
 
 function initAudioVideoState (stream) {

@@ -34,6 +34,17 @@ video {
     flex-wrap: wrap;
 }
 
+.videoWrapper {
+    position: relative;
+}
+
+.videoWrapper p {
+    position: absolute;
+    left: 10px;
+    bottom: 0;
+    color: #F5F5F5;
+}
+
 .left__controls {
     display: flex;
     color: #D2D2D2;
@@ -119,6 +130,7 @@ video {
 .main__participants {
     position: absolute;
     background-color: #242324;
+    overflow-y: scroll;
     top: 0;
     bottom: 0;
     left:0;
