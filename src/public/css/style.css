@@ -11,7 +11,8 @@ video {
 
 .main {
     display: flex;
-    height: 100vh;
+    min-height: 100vh;
+    overflow: hidden;
 }
 
 .main__left {
@@ -83,9 +84,11 @@ video {
     display: flex;
     flex-direction: column;
     flex: 0 0 20%;
+    overflow-y: scroll;
     border-left: 1px solid #3D3D42;
     background-color: #242324;
     color: #F5F5F5;
+
 }
 
 .right__header {
@@ -93,10 +96,20 @@ video {
 }
 
 .right__chat {
-    overflow-y: scroll;
+    position: relative;
     flex: 0 0;
     padding: 10px;
     flex-grow: 1;
+}
+
+.right-chat__messages-block {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow-wrap: break-word;
+    overflow-y: scroll;
 }
 
 .messages-block__message-content {

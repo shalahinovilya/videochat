@@ -182,6 +182,7 @@ function setStopButton () {
 
 const chatMessage = document.querySelector('input#chatMessage')
 const messagesBlock = document.querySelector('.right-chat__messages-block')
+const rightChat = document.querySelector('.right__chat')
 
 chatMessage.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' && e.target.value.length > 0) {
@@ -203,6 +204,7 @@ socket.on('createMessage', msg => {
                     </div>`
 
     messagesBlock.appendChild(div)
+    rightChat.scrollTop = rightChat.scrollHeight
 })
 
 socket.on('roomUsers', ({room, users}) => {
