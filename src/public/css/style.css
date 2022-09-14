@@ -3,11 +3,27 @@ body {
     padding: 0;
 }
 
+body::-webkit-scrollbar-track {
+    background: #3D3D42;
+}
+
+body::-webkit-scrollbar-thumb {
+    background: #585858;
+}
+
 video {
     height: 300px;
     width: 400px;
     object-fit: cover;
 }
+
+/* width */
+::-webkit-scrollbar {
+    width: 5px;
+    overflow-y: hidden;
+}
+
+
 
 .main {
     display: flex;
@@ -110,6 +126,23 @@ video {
     right: 0;
     overflow-wrap: break-word;
     overflow-y: scroll;
+/* Track */
+/*::-webkit-scrollbar-track {*/
+/*    background: #3D3D42;*/
+/*}*/
+
+/*!* Handle *!*/
+/*::-webkit-scrollbar-thumb {*/
+/*    background: #585858;*/
+/*}*/
+}
+
+.right-chat__messages-block::-webkit-scrollbar-track{
+    background: #3D3D42;
+}
+
+.right-chat__messages-block::-webkit-scrollbar-thumb{
+    background: #585858;
 }
 
 .messages-block__message-content {
@@ -152,15 +185,20 @@ video {
     z-index: -9999;
 }
 
+.main__participants::-webkit-scrollbar-track{
+    background: #3D3D42;
+}
+
+.main__participants::-webkit-scrollbar-thumb{
+    background: #585858;
+}
+
 .main-participants__participants-header {
     text-align: center;
     margin-bottom: 15px;
 }
 
-.main-participants__participants-list ul {
-    list-style: none;
-}
 
 .participants-list__participant-content {
-    margin: 15px 0 0 15px;
+    margin: 15px 0 15px 15px;
 }

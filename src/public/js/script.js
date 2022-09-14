@@ -14,7 +14,7 @@ const myVideoWrapper = createVideoBlock(myVideoClass, USERNAME)
 
 let myVideoStream
 
-navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+navigator.mediaDevices.getUserMedia({ video: true, audio: false })
     .then(stream => {
 
         const peer = new Peer(undefined, {
