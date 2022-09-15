@@ -7,6 +7,7 @@ const leaveMeeting = document.querySelector('.leave-meeting')
 const participantsBtn = document.querySelector('.chat-participants')
 const chatBtn = document.querySelector('.chat-messages')
 const participantsBlock = document.querySelector('.main__participants')
+const participantsBack = participantsBlock.querySelector('.participants-back')
 
 const myVideoClass = uuid()
 
@@ -221,13 +222,15 @@ leaveMeeting.addEventListener('click', () => {
 })
 
 participantsBtn.addEventListener('click', () => {
-    participantsBlock.style.opacity = '1'
-    participantsBlock.style.zIndex = '9999'
+    participantsBlock.classList.add('active')
 })
 
 chatBtn.addEventListener('click', () => {
-    participantsBlock.style.opacity = '0'
-    participantsBlock.style.zIndex = '-9999'
+    participantsBlock.classList.remove('active')
+})
+
+participantsBack.addEventListener('click', () => {
+    participantsBlock.classList.remove('active')
 })
 
 function uuid() {
